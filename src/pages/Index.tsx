@@ -6,10 +6,12 @@ import MatchSchedule from "@/components/MatchSchedule";
 import TeamCard from "@/components/TeamCard";
 import { useTeams } from "@/hooks/useTeams";
 import { usePointsTable } from "@/hooks/usePointsTable";
+import { getLiveMatches } from "@/data/matches";
 
 const Index = () => {
   const { data: teams, isLoading: teamsLoading } = useTeams();
   const { data: pointsTable, isLoading: pointsLoading } = usePointsTable();
+  const liveMatches = getLiveMatches(); // Get live matches from the data function
 
   return (
     <div className="flex min-h-screen flex-col">

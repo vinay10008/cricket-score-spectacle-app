@@ -15,6 +15,9 @@ type TeamCardProps = {
 };
 
 const TeamCard = ({ team, pointsData }: TeamCardProps) => {
+  // Ensure pointsData is always defined with default values
+  const safePointsData = pointsData || { matches: 0, points: 0 };
+  
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl">
       <div
@@ -34,10 +37,10 @@ const TeamCard = ({ team, pointsData }: TeamCardProps) => {
             <h3 className="text-lg font-bold">{team.name}</h3>
             <div className="mt-1 flex space-x-4 text-sm">
               <div>
-                <span className="font-medium">{pointsData.matches}</span> Matches
+                <span className="font-medium">{safePointsData.matches}</span> Matches
               </div>
               <div>
-                <span className="font-medium">{pointsData.points}</span> Points
+                <span className="font-medium">{safePointsData.points}</span> Points
               </div>
             </div>
           </div>

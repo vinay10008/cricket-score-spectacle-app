@@ -14,12 +14,18 @@ export const useTeams = () => {
   return useQuery({
     queryKey: ["teams"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("teams")
-        .select("*");
-      
-      if (error) throw error;
-      return data as Team[];
+      try {
+        const { data, error } = await supabase
+          .from("teams")
+          .select("*");
+        
+        if (error) throw error;
+        console.log("Teams data fetched:", data);
+        return data as Team[];
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+        return [];
+      }
     },
   });
 };

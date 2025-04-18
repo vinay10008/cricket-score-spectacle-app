@@ -1,4 +1,5 @@
-
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import Navbar from "@/components/Navbar";
 import LiveMatch from "@/components/LiveMatch";
 import PointsTable from "@/components/PointsTable";
@@ -9,20 +10,18 @@ import { usePointsTable } from "@/hooks/usePointsTable";
 import { getLiveMatches } from "@/data/matches";
 
 const Index = () => {
+  const { setTheme } = useTheme();
   const { data: teams, isLoading: teamsLoading } = useTeams();
   const { data: pointsTable, isLoading: pointsLoading } = usePointsTable();
-  const liveMatches = getLiveMatches(); // Get live matches from the data function
+  const liveMatches = getLiveMatches();
+
+  useEffect(() => {
+    setTheme("dark");
+  }, []);
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-white/90 to-white/70 backdrop-blur-sm" />
-        <img 
-          src="/ipl-background.jpg" 
-          alt="IPL Stadium" 
-          className="h-full w-full object-cover"
-        />
-      </div>
+    <div className="min-h-screen bg-background text-foreground dark:bg-[#0A0A0A]">
+      <div className="fixed inset-0 z-0 bg-gradient-to-b from-black/70 to-black/90 backdrop-blur-sm" />
       
       <Navbar />
       
@@ -32,7 +31,7 @@ const Index = () => {
           <img 
             src="https://bcciplayerimages.s3.ap-south-1.amazonaws.com/ipl/IPL-logo.png" 
             alt="IPL Logo" 
-            className="w-96"
+            className="w-96 grayscale"
           />
         </div>
 
@@ -98,7 +97,7 @@ const Index = () => {
         </section>
       </main>
 
-      <footer className="relative z-10 bg-ipl-dark py-4 text-center text-sm text-white">
+      <footer className="relative z-10 bg-black/50 py-4 text-center text-sm text-gray-300">
         <div className="container mx-auto">
           <p>© 2025 IPL Score App. All rights reserved.</p>
           <p className="mt-1 text-xs text-gray-400">

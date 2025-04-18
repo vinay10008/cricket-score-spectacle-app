@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import LiveMatch from "@/components/LiveMatch";
 import PointsTable from "@/components/PointsTable";

@@ -1,17 +1,25 @@
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Team } from "@/data/teams";
 
 type TeamCardProps = {
-  team: Team;
+  team: {
+    id: string;
+    name: string;
+    logo: string;
+    primary_color: string;
+  };
+  pointsData: {
+    matches: number;
+    points: number;
+  };
 };
 
-const TeamCard = ({ team }: TeamCardProps) => {
+const TeamCard = ({ team, pointsData }: TeamCardProps) => {
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl">
       <div
         className="h-2"
-        style={{ backgroundColor: team.primaryColor }}
+        style={{ backgroundColor: team.primary_color }}
       ></div>
       <CardContent className="p-4">
         <div className="flex items-center">
@@ -26,10 +34,10 @@ const TeamCard = ({ team }: TeamCardProps) => {
             <h3 className="text-lg font-bold">{team.name}</h3>
             <div className="mt-1 flex space-x-4 text-sm">
               <div>
-                <span className="font-medium">{team.matches}</span> Matches
+                <span className="font-medium">{pointsData.matches}</span> Matches
               </div>
               <div>
-                <span className="font-medium">{team.points}</span> Points
+                <span className="font-medium">{pointsData.points}</span> Points
               </div>
             </div>
           </div>

@@ -4,11 +4,12 @@ import LiveMatch from "@/components/LiveMatch";
 import PointsTable from "@/components/PointsTable";
 import MatchSchedule from "@/components/MatchSchedule";
 import TeamCard from "@/components/TeamCard";
-import { getLiveMatches } from "@/data/matches";
-import { teams } from "@/data/teams";
+import { useTeams } from "@/hooks/useTeams";
+import { usePointsTable } from "@/hooks/usePointsTable";
 
 const Index = () => {
-  const liveMatches = getLiveMatches();
+  const { data: teams, isLoading: teamsLoading } = useTeams();
+  const { data: pointsTable, isLoading: pointsLoading } = usePointsTable();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -71,11 +72,27 @@ const Index = () => {
           <h2 className="mb-6 text-center text-2xl font-semibold text-ipl-dark">
             Teams
           </h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
-            {teams.map((team) => (
-              <TeamCard key={team.id} team={team} />
-            ))}
-          </div>
+          {teamsLoading || pointsLoading ? (
+            <div className="text-center text-ipl-dark">Loading teams...</div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
+              {teams?.map((team) => {
+                const teamPoints = pointsTable?.find(
+                  (p) => p.team_id === team.id
+                );
+                return (
+                  <TeamCard
+                    key={team.id}
+                    team={team}
+                    pointsData={{
+                      matches: teamPoints?.matches ?? 0,
+                      points: teamPoints?.points ?? 0,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          )}
         </section>
       </main>
 
@@ -92,4 +109,3 @@ const Index = () => {
 };
 
 export default Index;
-

@@ -13,16 +13,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { teams } from "@/data/teams";
+import { usePointsTable } from "@/hooks/usePointsTable";
 
 const PointsTable = () => {
-  const sortedTeams = [...teams].sort((a, b) => {
-    // Sort by points, then by NRR
-    if (a.points !== b.points) {
-      return b.points - a.points;
-    }
-    return b.nrr - a.nrr;
-  });
+  const { data: pointsTableData, isLoading } = usePointsTable();
+
+  if (isLoading) {
+    return (
+      <Card className="bg-white/10 backdrop-blur-sm">
+        <CardContent className="p-6 text-center text-white">
+          Loading points table...
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="bg-white/10 backdrop-blur-sm">
@@ -44,32 +48,38 @@ const PointsTable = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sortedTeams.map((team, index) => (
+              {pointsTableData?.map((entry, index) => (
                 <TableRow 
-                  key={team.id} 
+                  key={entry.team_id} 
                   className={index < 4 ? "bg-ipl-purple/20" : "hover:bg-gray-700/10"}
                 >
-                  <TableCell className="text-center font-medium text-white">{index + 1}</TableCell>
+                  <TableCell className="text-center font-medium text-white">
+                    {index + 1}
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center">
                       <div className="mr-2 h-6 w-6 overflow-hidden rounded-full">
                         <img
-                          src={team.logo}
-                          alt={team.name}
+                          src={entry.teams.logo}
+                          alt={entry.teams.name}
                           className="h-full w-full object-cover"
                         />
                       </div>
-                      <span className="hidden text-sm text-white sm:inline">{team.name}</span>
-                      <span className="text-sm text-white sm:hidden">{team.shortName}</span>
+                      <span className="hidden text-sm text-white sm:inline">
+                        {entry.teams.name}
+                      </span>
+                      <span className="text-sm text-white sm:hidden">
+                        {entry.teams.short_name}
+                      </span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-center text-white">{team.matches}</TableCell>
-                  <TableCell className="text-center text-white">{team.won}</TableCell>
-                  <TableCell className="text-center text-white">{team.lost}</TableCell>
-                  <TableCell className="text-center font-bold text-white">{team.points}</TableCell>
+                  <TableCell className="text-center text-white">{entry.matches}</TableCell>
+                  <TableCell className="text-center text-white">{entry.won}</TableCell>
+                  <TableCell className="text-center text-white">{entry.lost}</TableCell>
+                  <TableCell className="text-center font-bold text-white">{entry.points}</TableCell>
                   <TableCell className="text-center text-white">
-                    {team.nrr > 0 ? "+" : ""}
-                    {team.nrr.toFixed(3)}
+                    {entry.nrr > 0 ? "+" : ""}
+                    {entry.nrr.toFixed(3)}
                   </TableCell>
                 </TableRow>
               ))}
